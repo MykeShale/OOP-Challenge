@@ -28,6 +28,8 @@ print("Let's get started!")
 name = input("Please enter the name of your pet: ")
 
 userPet = pet.Pet(name)
+# Try to load existing pet data
+userPet.load_pet_data()
 print("==============================================")
 print(f"🐶 Congratulations! You have created a pet named {userPet.name}.")
 time.sleep(2)
@@ -43,14 +45,17 @@ while True:
     print("4. 📃 Check your pet's status")
     print("5. 😴 Allow your pet to sleep")
     print("6. 📃 Display all tricks your pet knows")
-    print("7. Exit")
+    print("7. 📁 Upload a document")
+    print("8. 📋 View uploaded documents")
+    print("9. 🗑️  Delete a document")
+    print("10. Exit")
     print("==============================================")
     try:
-        userChoice = int(input("Please choose an option (1-7): "))
-        if userChoice < 1 or userChoice > 7:
+        userChoice = int(input("Please choose an option (1-10): "))
+        if userChoice < 1 or userChoice > 10:
             raise ValueError
     except ValueError:
-        print("Invalid input. Please enter a number between 1 and 7.")
+        print("Invalid input. Please enter a number between 1 and 10.")
         time.sleep(2)  # Adding a delay for better readability
         continue
 
@@ -94,6 +99,47 @@ while True:
         userPet.show_tricks()
         time.sleep(2)
     elif userChoice == 7:
+        # Upload a document
+        print("\n📁 Document Upload")
+        print("Available document types:")
+        print("1. Profile picture (for your pet)")
+        print("2. Medical records")
+        print("3. Training certificates")
+        print("4. General document")
+        
+        try:
+            doc_type_choice = int(input("Choose document type (1-4): "))
+            doc_types = {1: "profile", 2: "medical", 3: "training", 4: "general"}
+            if doc_type_choice not in doc_types:
+                print("Invalid choice. Using 'general' as default.")
+                doc_type = "general"
+            else:
+                doc_type = doc_types[doc_type_choice]
+        except ValueError:
+            print("Invalid input. Using 'general' as default.")
+            doc_type = "general"
+        
+        file_path = input("Enter the path to your document: ").strip()
+        if file_path:
+            userPet.upload_document(file_path, doc_type)
+        else:
+            print("No file path provided.")
+        time.sleep(2)
+    elif userChoice == 8:
+        # View uploaded documents
+        userPet.list_documents()
+        time.sleep(3)
+    elif userChoice == 9:
+        # Delete a document
+        userPet.list_documents()
+        if userPet.documents:
+            doc_name = input("\nEnter the name of the document to delete: ").strip()
+            if doc_name:
+                userPet.delete_document(doc_name)
+            else:
+                print("No document name provided.")
+        time.sleep(2)
+    elif userChoice == 10:
         confirm = input("Are you sure you want to exit? (yes/no): ").strip().lower()
         if confirm == "yes":
             print("Thank you for using the Pet Simulator!")
